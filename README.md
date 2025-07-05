@@ -39,13 +39,26 @@ Proyek ini merupakan sistem informasi vaksinasi berbasis **Spring Boot** dengan 
 📁 vaksinasi-service
 📄 docker-compose.yml
 
-````
-
-Sistem ini menggunakan **JWT (JSON Web Token)** untuk autentikasi.
-Token dikirim melalui header:
-
-```
-Authorization: Bearer <token>
 ```
 
-pada setiap permintaan ke endpoint yang memerlukan autentikasi.
+## 🔐 Autentikasi
+
+Sistem ini mendukung dua pendekatan autentikasi:
+
+### 1. JWT (JSON Web Token)
+
+Untuk penggunaan via API (misal Postman, mobile app):
+
+* Token dikirim melalui header:
+
+  ```
+  Authorization: Bearer <token>
+  ```
+
+### 2. Session-Based Authentication
+
+Untuk penggunaan berbasis web browser:
+
+* Setelah login berhasil, server menyimpan sesi pengguna (`HttpSession`) dan client akan otomatis menyertakan cookie pada setiap permintaan berikutnya.
+
+

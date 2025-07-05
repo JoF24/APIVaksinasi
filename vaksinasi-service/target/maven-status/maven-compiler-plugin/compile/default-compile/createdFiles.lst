@@ -1,0 +1,10 @@
+com\example\vaksinasiservice\model\JenisVaksin.class
+com\example\vaksinasiservice\model\LokasiVaksin.class
+com\example\vaksinasiservice\repository\RiwayatVaksinasiRepository.class
+com\example\vaksinasiservice\repository\JenisVaksinRepository.class
+com\example\vaksinasiservice\repository\LokasiVaksinRepository.class
+com\example\vaksinasiservice\controller\VaksinasiController.class
+com\example\vaksinasiservice\model\RiwayatVaksinasi.class
+com\example\vaksinasiservice\util\JwtUtil.class
+com\example\vaksinasiservice\filter\JwtFilter.class
+com\example\vaksinasiservice\VaksinasiServiceApplication.class

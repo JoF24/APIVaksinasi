@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  mysql-user-db:
+    image: mysql:8
+    container_name: mysql-user-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: usersdb
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    ports:
+      - "3307:3306"
+    volumes:
+      - user_data:/var/lib/mysql
+    networks:
+      - vaksin-net
+
+  mysql-vaksin-db:
+    image: mysql:8
+    container_name: mysql-vaksin-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: vaksinasidb
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    ports:
+      - "3308:3306"
+    volumes:
+      - vaksin_data:/var/lib/mysql
+    networks:
+      - vaksin-net
+
+  userservice:
+    build: ./user-service
+    container_name: userservice
+    depends_on:
+      - mysql-user-db
+    ports:
+      - "8081:8081"
+    networks:
+      - vaksin-net
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-user-db:3306/usersdb
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+
+  vaksinasiservice:
+    build: ./vaksinasi-service
+    container_name: vaksinasiservice
+    depends_on:
+      - mysql-vaksin-db
+    ports:
+      - "8082:8082"
+    networks:
+      - vaksin-net
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-vaksin-db:3306/vaksinasidb
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+
+  gateway:
+    build: ./gateway-service
+    container_name: gatewayservice
+    depends_on:
+      - userservice
+      - vaksinasiservice
+    ports:
+      - "8080:8080"
+    networks:
+      - vaksin-net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8083:80"
+    environment:
+      - PMA_ARBITRARY=1          # ✅ agar kolom server muncul saat login
+    depends_on:
+      - mysql-user-db
+      - mysql-vaksin-db
+    networks:
+      - vaksin-net
+
+volumes:
+  user_data:
+  vaksin_data:
+
+networks:
+  vaksin-net:
